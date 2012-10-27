@@ -1,0 +1,30 @@
+\name{V-class}
+\Rdversion{1.1}
+\docType{class}
+\alias{V-class}
+
+\title{Class \code{"V"}}
+\description{
+Matrix where M[i, j] represents the number of items in M[i, (j + 1):n] which are ranked before item j.
+}
+\section{Objects from the Class}{
+Objects can be created by calls of the form \code{new("V", ...)}.
+%%  ~~ describe objects here ~~ 
+}
+\section{Slots}{
+  \describe{
+    \item{\code{V}:}{Object of class \code{"matrix"} ~~ }
+  }
+}
+\section{Methods}{
+No methods defined with class "V" in the signature.
+}
+
+\author{
+Erik Gregory
+}
+
+\examples{
+#showClass("V")
+}
+\keyword{classes}

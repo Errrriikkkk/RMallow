@@ -1,0 +1,6 @@
+# Initialize objects for RMallow
+.First.lib <- function(libname, pkgname) {
+  #if( !require(methods) ) stop("we require methods for package Foo")
+  where <- match(paste("package:", pkgname, sep=""), search())
+  .initFoo(where)
+}

@@ -1,0 +1,92 @@
+\name{ranking-class}
+\Rdversion{1.1}
+\docType{class}
+\alias{ranking-class}
+\alias{findV,ranking-method}
+\alias{geqInfo,ranking-method}
+\alias{geqties,ranking-method}
+\alias{info,ranking-method}
+\alias{initialize,ranking-method}
+\alias{items,ranking-method}
+\alias{rankers,ranking-method}
+\alias{ranks,ranking-method}
+\alias{relative,ranking-method}
+\alias{relativeRank,ranking-method}
+\alias{show,ranking-method}
+\alias{tieInfo,ranking-method}
+\alias{ties,ranking-method}
+\alias{type,ranking-method}
+\alias{V,ranking-method}
+
+\title{Class \code{"ranking"}}
+\description{
+%%  ~~ A concise (1-5 lines) description of what the class is. ~~
+}
+\section{Objects from the Class}{
+Objects can be created by calls of the form \code{new("ranking", object, meaning)}.
+%%  ~~ describe objects here ~~ 
+}
+\section{Slots}{
+  \describe{
+    \item{\code{ranks}:}{Object of class \code{"data.frame"} ~~ }
+    \item{\code{info}:}{Object of class \code{"matrix"} ~~ }
+    \item{\code{type}:}{Object of class \code{"character"} ~~ }
+    \item{\code{ties}:}{Object of class \code{"matrix"} ~~ }
+    \item{\code{geqties}:}{Object of class \code{"matrix"} ~~ }
+    \item{\code{relative}:}{Object of class \code{"matrix"} ~~ }
+    \item{\code{V}:}{Object of class \code{"matrix"} ~~ }
+    \item{\code{items}:}{Object of class \code{"integer"} ~~ }
+    \item{\code{rankers}:}{Object of class \code{"integer"} ~~ }
+  }
+}
+\section{Extends}{
+Class \code{"\linkS4class{ranks}"}, directly.
+Class \code{"\linkS4class{info}"}, directly.
+Class \code{"\linkS4class{type}"}, directly.
+Class \code{"\linkS4class{ties}"}, directly.
+Class \code{"\linkS4class{geqties}"}, directly.
+Class \code{"\linkS4class{relative}"}, directly.
+Class \code{"\linkS4class{V}"}, directly.
+Class \code{"\linkS4class{items}"}, directly.
+Class \code{"\linkS4class{rankers}"}, directly.
+}
+\section{Methods}{
+  \describe{
+    \item{findV}{\code{signature(ranks = "ranking")}: ... }
+    \item{geqInfo}{\code{signature(ranks = "ranking")}: ... }
+    \item{geqties}{\code{signature(object = "ranking")}: ... }
+    \item{info}{\code{signature(object = "ranking")}: ... }
+    \item{initialize}{\code{signature(.Object = "ranking")}: ... }
+    \item{items}{\code{signature(object = "ranking")}: ... }
+    \item{rankers}{\code{signature(object = "ranking")}: ... }
+    \item{ranks}{\code{signature(object = "ranking")}: ... }
+    \item{relative}{\code{signature(object = "ranking")}: ... }
+    \item{relativeRank}{\code{signature(ranks = "ranking")}: ... }
+    \item{show}{\code{signature(object = "ranking")}: ... }
+    \item{tieInfo}{\code{signature(ranks = "ranking")}: ... }
+    \item{ties}{\code{signature(object = "ranking")}: ... }
+    \item{type}{\code{signature(object = "ranking")}: ... }
+    \item{V}{\code{signature(object = "ranking")}: ... }
+	 }
+}
+\references{
+%%  ~~put references to the literature/web site here~~
+}
+\author{
+%%  ~~who you are~~
+}
+\note{
+%%  ~~further notes~~
+}
+
+%% ~Make other sections like Warning with \section{Warning }{....} ~
+
+\seealso{
+%%  ~~objects to See Also as \code{\link{~~fun~~}}, ~~~
+%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
+}
+\examples{
+library("RMallow")
+#showClass("ranking")
+}
+\keyword{classes}

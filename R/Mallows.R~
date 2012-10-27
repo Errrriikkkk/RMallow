@@ -1,0 +1,137 @@
+#' Fits a Multi-Modal Mallows' model to ranking data.
+#' 
+#' Fits the Multi-Modal Mallows' model to partial or full ranking data, using
+#' Kendall's metric and an EM algorithm.  This is essentially metric sequence
+#' clustering.
+#' 
+#' @param ranking An object of class "ranking", as provided by this package.
+#' @param G Number of modes, 2 or greater.
+#' @param iter Maximum number of iterations.
+#' @param hyp Hypothesis sequence vector, to initialize one of the cluster
+#' centers at.
+#' @param plot.like Should the likelihood be printed at each iteration?
+#' @param top.bound A vector of top bounds for each cluster
+#' @return See output of FormatOut
+#' @author Erik Gregory
+#' @references "Mixtures of distance-based models for ranking data". Thomas 
+#' Brendan Murphy & Donal Martin. 1 April 2002. Computational Statistics & 
+#' Data Analysis 41 (2003) 645-655.
+#' @keywords cluster Mallow
+ 
+Mallows <-
+function(ranking, G = 1, iter = 10, hyp = NULL, plot.like = FALSE, 
+         top.bound = rep(1000, ncol(ranking@ranks))) {
+  if(class(ranking) != "ranking") {
+    cat("Converting input to a ranking object\n")
+    ranking <- new("ranking", ranking)
+  }
+  # Number of subjects.
+  N <- nrow(ranking@ranks)
+  # Number of items being ranked.
+  abils <- ncol(ranking@ranks)
+  # Distance distribution in the space
+  dists.table <- DistanceDistribution(abils)
+  # Initialize the p-value of membership in each cluster.
+  p <- rep(1/G, G)
+  like <- -1e10
+  # Initialize the modal sequences.
+  R <- Rgen(G, hyp, abils)
+  # Initialize the lambda values.
+  lambda <- rep(1, G)
+  # Normalizing Coefficients on lambda
+  C.lam <- unlist(lapply(lambda, 
+                  function(i) C_lam(i, items = abils)))
+  # Keep track of likelihood
+  likelihood <- 0*(1:iter)
+  best.like <- 0
+  all.dists.data <- NULL
+  i <- 1
+  infos <- ranking@info
+  all.dists.data <- AllKendall(ranking@ranks, R, infos)
+  while (i <= iter) {
+    # E Step
+    #print(R)
+   # z <- EStep(R, ranking@ranks, p, lambda, G, N, C.lam, all.dists.data)
+    if( i > 1) {
+      z0 <- z
+    }
+    z <- UpdateZ(ranking, lambda, all.dists.data, p)
+#     if(i > 1){
+#       z0 <- z
+#       print(paste("z", Likelihood(z, p, C.lam, lambda, all.dists.data)))}
+    # M Step
+    R <- UpdateR(ranking@ranks, z, infos)
+    all.dists.data <- AllKendall(ranking@ranks, R, infos)
+    #if(i > 1){print(paste("dists", Likelihood(z, p, C.lam, lambda, all.dists.data)))}
+    p <- UpdateP(z)
+#     lambda <- UpdateLambda(ranking@ranks, R, z, G, all.dists.data,
+#                           dists.table = dists.table, 
+#                           top.bound = top.bound)
+    lambda0 <- lambda
+    lambda <- findLambda(ranking, all.dists.data, top.bound, G, N, z)
+    C.lam <- unlist(lapply(lambda, 
+                           function(i) C_lam(i, items = abils)))
+    like0 <- like
+    like <- Likelihood(z, p, C.lam, lambda, all.dists.data, ranking)
+    likelihood[i] <- sum(like)
+    #print(paste("Lambda", likelihood[i]))
+    if (i > 2) {
+      if (likelihood[i] - likelihood[i -1] < 0.001) {
+        cat(paste("Algorithm converged at iteration", i, "\n"))
+        i <- iter
+      }
+      if(likelihood[i] - likelihood[i - 1] < -0.0001) {
+        #i <- iter + 1
+        print(paste("Going Backward...", i))
+      }
+    }
+    i <- i + 1
+  }
+  out <- FormatOut(R, p, lambda, z, ranking, likelihood)
+  return(out)
+}
+
+
+#' All Kendall's distances between two sets of rankings.
+#' 
+#' Calculates all of the Kendall's distances between two different sets of
+#' rankings.
+#' 
+#' @param r One set of sequences.
+#' @param seqs Another set of sequences.
+#' @param data.info Optional argument, a 0/1/NA matrix specifying all of the
+#' relevant information to calculate Kendall's difference for "r".  Used for
+#' efficiency in "Solve".
+#' @return Matrix where output[i, j] represents the distance from sequence "i"
+#' in "r" to sequence "j" in "seqs".
+#' @author Erik Gregory
+#' @keywords Kendall distance
+#' @examples
+#' 
+#' data1 <- do.call("rbind", list(1:5, 5:1, c(3, 2, 1, 4, 5)))
+#' data2 <- do.call("rbind", list(1:5, 5:1))
+#' # AllKendall(data1, data2)
+#' 
+
+AllKendall <-
+  function(r, seqs, data.info = NULL) {
+    N <- nrow(r)
+    n.seq <- nrow(seqs)
+    dists <- matrix(0, nrow = N, ncol = n.seq)
+    inds <- combn(ncol(r), 2)
+    if (is.null(data.info)) {
+      # Info for the data
+      data.info <- KendallInfo(r, inds)
+    }
+    # Info for the sequences
+    seqs.info <- KendallInfo(seqs, inds)
+    if (n.seq > 1) {
+      for (i in 1:nrow(seqs.info)) {
+        dists[, i] <- rowSums(abs(sweep(data.info, 2, seqs.info[i, ], "-")), na.rm = TRUE)
+      }
+    }
+    else {
+      dists <- rowSums(abs(sweep(data.info, 2, seqs.info, "-")), na.rm = TRUE)
+    }
+    return(dists)
+  }

@@ -1,4 +1,3 @@
 RMallow
 =======
-
-Sequence clustering model in R
+RMallow implements Mallows models in R.

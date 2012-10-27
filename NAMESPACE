@@ -1,0 +1,6 @@
+import(methods)
+exportPattern("^[^\\.]")
+importFrom(multicore, mclapply)
+exportClasses(ranking, mallow)
+exportMethods(relative, items, info, rankers, V, geqties,
+	      props, pvals, theta)
