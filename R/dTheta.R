@@ -9,16 +9,16 @@ dTheta <- function(ranks, thetas = NULL) {
     ranks <- list(ranks)
   }
   G <- length(ranks)
-  N <- rankers(ranks[[1]])
-  n <- items(ranks[[1]])
+  N <- ranks[[1]]$rankers
+  n <- ranks[[1]]$items
   out <- matrix(0, nrow = N, ncol = G)
   for(i in 1:G) {
     if(!is.null(thetas)) {
-      out[, i] <- colSums(thetas[i, ]*t(V(ranks[[i]])), 
+      out[, i] <- colSums(thetas[i, ]*t(ranks[[i]]$V), 
                           na.rm = TRUE)
     }
     else {
-      out[, i] <- rowSums(V(ranks[[i]]), na.rm = TRUE)
+      out[, i] <- rowSums(ranks[[i]]$V, na.rm = TRUE)
     }
   }
   return(out)

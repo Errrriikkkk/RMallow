@@ -3,8 +3,8 @@
 \title{Fits a Multi-Modal Mallows' model to ranking data.}
 \usage{
   Mallows(ranks, G = 1, iter = 10, hyp = NULL,
-    plot.like = FALSE,
-    top.bound = rep(1000, ncol(ranks(ranks))), cores = 1)
+    top.bound = rep(1000, ncol(ranks(ranks))), cores = 1,
+    threshold = 0.001, algo = "optimal", local = FALSE)
 }
 \arguments{
   \item{ranks}{An object of class "ranking", as provided by
@@ -17,12 +17,18 @@
   \item{hyp}{Hypothesis sequence vector, to initialize one
   of the cluster centers at.}
 
-  \item{plot.like}{Should the likelihood be printed at each
-  iteration?}
+  \item{threshold}{difference in likelihood that is
+  accepted to mean the algorithm has converged}
+
+  \item{algo}{a string, either "fv" for Fligner-Verducci or
+  any other string for optimal}
 
   \item{top.bound}{A vector of top bounds for each cluster}
 
   \item{cores}{number of cores to use in the search}
+
+  \item{local}{if using algo = "fv", should a local search
+  be performed around the mode?}
 }
 \value{
   an object of class 'mallow'

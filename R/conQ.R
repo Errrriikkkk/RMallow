@@ -4,9 +4,9 @@
 #' with for each individual.
 #' @return a list of transitions matrices, one for each input in the list \code{ranks}
 conQ <- function(ranks, pvals = 1) {
-  abils <- items(ranks)
-  temp1 <- info(ranks)
-  namez <- names(ranks(ranks))
+  abils <- ranks$items
+  temp1 <- ranks$info
+  namez <- names(ranks$ranks)
   temp <- colMeans(abs(temp1 - 1)*pvals, 
                    na.rm = TRUE) # Number of abilities
   temp2 <- colMeans(temp1*pvals, 

@@ -2,7 +2,7 @@
 \alias{Theta}
 \title{Update the theta parameters of a GMM for each cluster.}
 \usage{
-  Theta(ranks, z, min.pref = 0.1)
+  Theta(ranks, z, min.pref = 0.001)
 }
 \arguments{
   \item{ranks}{A list of ranking objects, possibly of

@@ -17,16 +17,22 @@ parallelSearch <- function(Qs, thetas, cores = 4,
   best.like <- rep(best.worst, G)
   closed <- matrix(0, nrow = G, ncol = cores)
   found <- FALSE
+  if (suppressWarnings(require(multicore))) {
+    fn <- mclapply
+  }
+  else {
+    fn <- lapply
+  }
   while(found == FALSE) { # iterate until all threads, nodes are done.
-    #old <- queues
-    queues <- mclapply(1:cores, function(k) 
-      wrapSearch(Qs, thetas, queues[[k]], 
-                 closed[, k], iter = iter,
-                 LUB = LUB)) # Run the search using all cores)
-    LUB <- apply(sapply(queues, 
-                        function(k) sapply(k, 
-                                           function(m) m[["LUB"]])), 
-                 1, min) # LUBs on cost for all clusters
+      queues <- fn(1:cores, function(k)
+                       wrapSearch(Qs, thetas, queues[[k]],
+                       closed[, k], iter = iter,
+                       LUB = LUB))
+    for (j in 1:G) {
+      for (k in 1:cores) {
+        LUB[j] <- min(queues[[k]][[j]]$LUB, LUB[j])
+      }
+    }
     cat(paste("\nParallel SearchPi* iteration", count, ":\n"))
     for(j in 1:G) { # Consolidate LUBs, closed threads and clusters
       for(i in 1:cores) { # For each thread

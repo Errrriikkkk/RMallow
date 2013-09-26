@@ -6,6 +6,7 @@
 #' @param geqties Tie group information for the individuals assigned to the cluster.
 #' @param abils The number of items ranked in the data.
 #' @return The value of the objective function with the input parameters.  Goal is zero.
+#' 
 lambdaRoot <- function(x, N, D, geqties, abils) {
   inds <- 1:abils
   y <- sum((geqties - N)*(inds*x^inds)/(1 - x^inds)) - D

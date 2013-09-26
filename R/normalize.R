@@ -10,14 +10,14 @@ normalize <- function(ranks, thetas = NULL) {
   if(!is.list(ranks)) {
     ranks <- list(ranks)
   }
-  n <- items(ranks[[1]])
-  N <- rankers(ranks[[1]])
+  n <- ranks[[1]]$items
+  N <- ranks[[1]]$rankers
   G <- length(ranks)
   out <- matrix(0, nrow = N, ncol = G)
   for(i in 1:G) {
-    numers <- 1 - exp(t(-thetas[i, ]*t(relative(ranks[[i]])[, 1:(n - 1)])))
     denom <- (1 - exp(-(n - 1:(n - 1) + 1)*thetas[i, ]))
-    temp <- numers/denom
+    numers <- 1 - exp(t(-thetas[i, ]*t(ranks[[i]]$relative[, 1:(n - 1)])))
+    temp <- sweep(numers, 2, FUN = "/", denom)
     out[, i] <- apply(temp, 1, prod)
   }
   return(out)

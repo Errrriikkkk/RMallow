@@ -3,7 +3,8 @@
 \title{Fit a Generalized Mallows Mixture model to a data set}
 \usage{
   GMM(ranks, G = 1, iter = 10, hyp = NULL, cores = 4,
-    grouping = NULL, method = "BNB")
+    grouping = NULL, method = "BNB", algo = "optimal",
+    threshold = 0.001, local = FALSE)
 }
 \arguments{
   \item{ranks}{an object of class 'ranking', or a data set
@@ -24,7 +25,15 @@
   \item{grouping}{a variable used to progressively check
   the clustering progress of the algorithm}
 
+  \item{algo}{string supplying the algorithm to use}
+
+  \item{threshold}{difference in the likelihood after which
+  to consider the model to have converged}
+
   \item{method}{see further description below.}
+
+  \item{local}{should a local search be done around they
+  hypothesized mode, if using algo = "fv"}
 }
 \value{
   An object of class 'mallow', with all information on

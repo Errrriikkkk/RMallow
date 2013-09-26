@@ -2,7 +2,7 @@
 \alias{genRanks}
 \title{Generate a list of objects of class ranking.}
 \usage{
-  genRanks(ranks, modes, updates, orig)
+  genRanks(ranks, old.modes, new.modes, orig)
 }
 \arguments{
   \item{ranks}{a list of objects of class 'ranking'.  May

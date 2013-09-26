@@ -4,40 +4,13 @@ Title: Fit Multi-Modal Mallows' Models to ranking data.
 Version: 1.0
 Date: 2012-02-18
 Depends:
-    methods, multicore
-Imports: multicore, methods
+    methods
+Suggests:
+    multicore
+Imports:
+    methods
 Author: Erik Gregory
 Maintainer: <egregory2007@yahoo.com>
 Description: An EM algorithm to fit Mallows' Models to full or partial
     rankings, with or without ties.
 License: GPL (>= 2)
-Collate:
-    'Mallows.R'
-    'RankObjects.R'
-    'RMallow-internal.R'
-    'RMallow-package.R'
-    'findLambda.R'
-    'lambdaRoot.R'
-    'admissible.r'
-    'conQ.R'
-    'createInps.R'
-    'dTheta.R'
-    'expect.R'
-    'genRanks.R'
-    'GMM.r'
-    'kendallInfo.R'
-    'likelihoodGMM.R'
-    'normalize.R'
-    'parallelSearch.R'
-    'pRank.R'
-    'printInfo.r'
-    'rGen.R'
-    'searchPi2.R'
-    'searchPi.R'
-    'simplifySequences.R'
-    'thetaObj.R'
-    'Theta.r'
-    'topBound.R'
-    'wrapSearch.R'
-    'zzz.R'
-    'mallow.r'

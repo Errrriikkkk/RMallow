@@ -9,9 +9,9 @@ ranking <- setRefClass("ranking", fields = list(info = "matrix",
                                      V = "matrix"),
                        methods = list(
                       show = function() {
-                        cat(cat(paste("Ranking objects on", type, "rankings with", 
+                        cat(paste("Ranking objects on", type, "rankings with", 
                                       rankers, "rankers and",
-                                      items, "items ranked.")))
+                                      items, "items ranked.\n"))
                       },
                       initialize = function(input, meaning = NULL) {
                         if(!missing(input)) {
@@ -21,7 +21,6 @@ ranking <- setRefClass("ranking", fields = list(info = "matrix",
                           else {
                             items <<- ncol(input)
                             rankers <<- nrow(input)
-                            cat('Simplifying Rankings\n')
                             temp <- simplifySequences(as.matrix(input))
                             ranks <<- data.frame(temp)
                             if(all(diff(rowSums(ranks)) == 0)) {
@@ -37,15 +36,10 @@ ranking <- setRefClass("ranking", fields = list(info = "matrix",
                             else {
                               type <<- "partial"
                             }
-                            cat('Calculating tie information\n')
                             ties <<- tieInfo(ranks) 
-                            cat('Calculating more tie information\n')
                             geqties <<- geqInfo(ranks, ties)
-                            cat('Calculating kendall info\n')
                             info <<- kendallInfo(ranks)
-                            cat('Calculating relative ranks of items within their tie groups\n')
                             relative <<- relativeRank(ranks)
-                            cat('Calculating the V matrix')
                             V <<- findV(info, ncol(ranks))
                           }
                         }
@@ -62,7 +56,23 @@ mallow <- setRefClass("mallow", fields = list(modes = "matrix",
                       methods = list(
                         initialize = function(ranks, modes, props,
                                               normalize, log.like,
-                                              clust, dists, pvals) {
+                                              clust, dists, pvals, theta) {
                             callSuper(ranks)
+                            modes <<- modes
+                            props <<- props
+                            pvals <<- pvals
+                            theta <<- theta
+                            log.like <<- log.like
                             .self$initFields()
+                        },
+                        show = function() {
+                          cat('Mallows model with modes: \n')
+                          namez <- names(ranks)
+                          m <- t(apply(modes, 1, function(i) namez[i]))
+                          cat('Modes:\n')
+                          print(m)
+                          cat('\nThetas:\n')
+                          print(theta)
+                          cat('\nProportions:\n')
+                          cat(props)
                         }))
