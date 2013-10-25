@@ -45,17 +45,13 @@ tieInfo <- function(ranks) {
   tie.mat
 }
 relativeRank <- function(ranks) {
-  N <- nrow(ranks)
   n <- ncol(ranks)
-  temp <- ranks
-  out <- matrix(0, nrow = N, ncol = n)
-  for(i in 1:N) {
-    n <- max(temp[i, ])
-    for(j in 1:n) {
-      ind <- which(temp[i, ] == j)
-      out[i, ind] <- length(ind) - (1:length(ind)) + 1
+    N <- nrow(ranks)
+    out <- matrix(0, nrow = N, ncol = n)
+    out[, n] <- 1
+    for (i in 1:(n - 1)) {
+      out[, (n - i)] <- rowSums(ranks[, (n - i)] == ranks[, (n - i):n])
     }
-  }
   out
 }
 

@@ -4,7 +4,7 @@ Title: Fit Multi-Modal Mallows' Models to ranking data.
 Version: 1.0
 Date: 2012-02-18
 Depends:
-    methods
+    methods, multicore
 Suggests:
     multicore
 Imports:

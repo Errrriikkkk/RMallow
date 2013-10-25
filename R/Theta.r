@@ -6,15 +6,14 @@
 Theta <- function(ranks, z, min.pref = 0.001) {
   G <- length(ranks)
   n <- ranks[[1]]$items
-  theta <- matrix(0, nrow = G, ncol = (n - 1))
-  for(i in 1:G) {
-    for(j in 1:(n - 1)) {
+  theta <- lapply(1:G, function(i) {
+    theta <- mclapply(1:(n - 1), function(j) {
       max.pref <- n - j + 1
       V <- sum(z[, i]*ranks[[i]]$V[, j], na.rm = TRUE)
       flower <- thetaObj(V, n, j, z[, i], ranks[[i]]$relative[, j], min.pref)
       fupper <- thetaObj(V, n, j, z[, i], ranks[[i]]$relative[, j], max.pref)
       if(sign(flower) != sign(fupper)) {
-        theta[i, j] <- uniroot(thetaObj, V = V,
+        theta <- uniroot(thetaObj, V = V,
                                n = n, j = j, 
                                z = z[, i], relative = ranks[[i]]$relative[, j],
                                interval = c(min.pref, max.pref), 
@@ -22,10 +21,12 @@ Theta <- function(ranks, z, min.pref = 0.001) {
                                f.upper = fupper)$root
       }
       else {
-        cat(paste("fupper:", fupper, ", flower:", flower, ", Cluster:", i, ", Theta:", j, '\n'))
-        theta[i, j] <- min.pref
+        #cat(paste("fupper:", fupper, ", flower:", flower, ", Cluster:", i, ", Theta:", j, '\n'))
+        theta <- min.pref
       }
-    }
-  }
-  return(theta)
+      theta
+    })
+    unlist(theta)
+  })
+  return(do.call('rbind', theta))
 }

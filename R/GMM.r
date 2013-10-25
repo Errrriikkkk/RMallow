@@ -61,10 +61,15 @@ GMM <- function(ranks, G = 1, iter = 10, hyp = NULL, cores = 4, grouping = NULL,
     else if (algo == "fv") {
       thetas <- NULL
       R <- list()
+      res <- mclapply(
+        1:G,
+        function(j) {
+          fv(orig1, z[, j], local = local)
+        }
+      )
       for (j in 1:G) {
-        res <- fv(orig1, z[, j], local = local)
-        R[[j]] <- res[[1]]
-        thet <- res[[2]]
+        R[[j]] <- res[[j]][[1]]
+        thet <- res[[j]][[2]]
         thetas <- rbind(thetas, thet)
       }
       ranks <- genRanks(ranks, modes, R, orig)

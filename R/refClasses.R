@@ -68,7 +68,7 @@ mallow <- setRefClass("mallow", fields = list(modes = "matrix",
                         show = function() {
                           cat('Mallows model with modes: \n')
                           namez <- names(ranks)
-                          m <- t(apply(modes, 1, function(i) namez[i]))
+                          m <- apply(t(apply(modes, 1, function(i) namez[i])), 1, paste, collapse = ", ")
                           cat('Modes:\n')
                           print(m)
                           cat('\nThetas:\n')
